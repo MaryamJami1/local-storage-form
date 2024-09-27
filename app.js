@@ -20,9 +20,31 @@ rgstrBtn && rgstrBtn.addEventListener("click", function () {
 
 
     console.log(userArray);
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "center",
+        showConfirmButton: false,
+        timer: 2000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    });
+    Toast.fire({
+        icon: "success",
+        title: "Sign up successfully"
+    });
 
-    window.location.href = "login.html"
+    setTimeout(function () {
+        window.location.href = "login.html"
+    }, 2000)
+
+
     localStorage.setItem("users", JSON.stringify(userArray))
+
+
+
 
 });
 
@@ -40,35 +62,72 @@ loginBtn && loginBtn.addEventListener("click", function () {
 
     let isRegistered = false;
 
+
     for (var user of users) {
-        if (user.email == loginEmail.value && user.password == user.password) {
-            console.log("login succesfully");
-            isRegistered=true;
-            break;
-        } 
-        else if(user.email == loginEmail && user.password != loginPass  ){
-            console.log("Email is correct but Password is not matched", "email");
-            isRegistered=true;
-            break;
-        }
-        else if(user.password == user.password && user.email != loginEmail){
-            console.log("Password is correct but Email is not matched" , "password");
+        if (user.email == loginEmail.value) {
 
-            isRegistered=true;
-            break;
-        }
+            if (user.password == loginPass.value) {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: "center",
+                    showConfirmButton: false,
+                    timer: 1000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                      toast.onmouseenter = Swal.stopTimer;
+                      toast.onmouseleave = Swal.resumeTimer;
+                    }
+                  });
+                  Toast.fire({
+                    icon: "success",
+                    title: "Signed in successfully"
+                  });
 
+
+                  setInterval(() => {
+                    window.location.href="dashboard.html"
+                  }, 1000);
+                
+                isRegistered = true;
+                break;
+
+            }
+            else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Incorrect Password",
+                    text: "Please double-check your password and try again.",
+                  });
+                isRegistered = true;
+                break;
+            }
+
+        }
+        else {
+            if (loginPass.value == user.password) {
+                Swal.fire({
+                    icon: "error",
+                    title: "Invalid Email",
+                    text: "It looks like you’ve entered the wrong email. Please try again.",
+                  });
+                    isRegistered = true;
+                break;
+            }
+
+        }
 
     }
-    if(!isRegistered){
-        console.log("You are not registered");
-        
+    if (!isRegistered) {
+        Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Account Not Found",
+            text: "It seems like you haven't registered yet. Please sign up first.",
+            showConfirmButton: false,
+            timer: 2000
+          });
+
     }
-
-
     loginEmail.value = "";
     loginPass.value = ""
-
 })
-
-
