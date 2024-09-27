@@ -1,25 +1,30 @@
+
+
 let rgstrBtn = document.getElementById("register");
-let userArray = [];
+let userArray = JSON.parse(localStorage.getItem("users")) || [];  // Load existing users from localStorage
 
 rgstrBtn && rgstrBtn.addEventListener("click", function () {
-    let userName = document.getElementById("accountName")
-    let userEmail = document.getElementById("accountEmail")
-    let userPass = document.getElementById("accountPassword")
+    let userName = document.getElementById("accountName");
+    let userEmail = document.getElementById("accountEmail");
+    let userPass = document.getElementById("accountPassword");
 
     let userObj = {
         name: userName.value,
         email: userEmail.value,
         password: userPass.value,
-    }
+    };
 
     userArray.push(userObj);
 
-    userName.value = ""
-    userEmail.value = ""
-    userPass.value = ""
+    // Clear the input fields
+    userName.value = "";
+    userEmail.value = "";
+    userPass.value = "";
 
+    // Store updated userArray in localStorage
+    localStorage.setItem("users", JSON.stringify(userArray));
 
-    console.log(userArray);
+    // Show success message with SweetAlert
     const Toast = Swal.mixin({
         toast: true,
         position: "center",
@@ -36,87 +41,63 @@ rgstrBtn && rgstrBtn.addEventListener("click", function () {
         title: "Sign up successfully"
     });
 
+    // Redirect to login page after 2 seconds
     setTimeout(function () {
-        window.location.href = "login.html"
-    }, 2000)
-
-
-    localStorage.setItem("users", JSON.stringify(userArray))
-
-
-
-
+        window.location.href = "login.html";
+    }, 2000);
 });
-
 
 let loginBtn = document.getElementById("login");
 
-
-loginBtn && loginBtn.addEventListener("click", function () {
+loginBtn && loginBtn.addEventListener("click", function (event) {
+    event.preventDefault();
     let loginEmail = document.getElementById("loginEmail");
     let loginPass = document.getElementById("loginPass");
     console.log(loginEmail.value, loginPass.value);
 
     var users = JSON.parse(localStorage.getItem("users"));
 
-
     let isRegistered = false;
 
+    if (users) {
+        for (var user of users) {
+            if (user.email == loginEmail.value) {
+                if (user.password == loginPass.value) {
+                    const Toast = Swal.mixin({
+                        toast: true,
+                        position: "center",
+                        showConfirmButton: false,
+                        timer: 1000,
+                        timerProgressBar: true,
+                        didOpen: (toast) => {
+                            toast.onmouseenter = Swal.stopTimer;
+                            toast.onmouseleave = Swal.resumeTimer;
+                        }
+                    });
+                    Toast.fire({
+                        icon: "success",
+                        title: "Signed in successfully"
+                    });
 
-    for (var user of users) {
-        if (user.email == loginEmail.value) {
+                    setTimeout(function () {
+                        window.location.href = "dashboard.html";
+                    }, 1000);
 
-            if (user.password == loginPass.value) {
-                const Toast = Swal.mixin({
-                    toast: true,
-                    position: "center",
-                    showConfirmButton: false,
-                    timer: 1000,
-                    timerProgressBar: true,
-                    didOpen: (toast) => {
-                      toast.onmouseenter = Swal.stopTimer;
-                      toast.onmouseleave = Swal.resumeTimer;
-                    }
-                  });
-                  Toast.fire({
-                    icon: "success",
-                    title: "Signed in successfully"
-                  });
-
-
-                  setInterval(() => {
-                    window.location.href="dashboard.html"
-                  }, 1000);
-                
-                isRegistered = true;
-                break;
-
-            }
-            else {
-                Swal.fire({
-                    icon: "error",
-                    title: "Incorrect Password",
-                    text: "Please double-check your password and try again.",
-                  });
-                isRegistered = true;
-                break;
-            }
-
-        }
-        else {
-            if (loginPass.value == user.password) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Invalid Email",
-                    text: "It looks like you’ve entered the wrong email. Please try again.",
-                  });
                     isRegistered = true;
-                break;
+                    break;
+                } else {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Incorrect Password",
+                        text: "Please double-check your password and try again.",
+                    });
+                    isRegistered = true;
+                    break;
+                }
             }
-
         }
-
     }
+
     if (!isRegistered) {
         Swal.fire({
             position: "center",
@@ -125,9 +106,15 @@ loginBtn && loginBtn.addEventListener("click", function () {
             text: "It seems like you haven't registered yet. Please sign up first.",
             showConfirmButton: false,
             timer: 2000
-          });
-
+        });
     }
+
     loginEmail.value = "";
-    loginPass.value = ""
-})
+    loginPass.value = "";
+});
+
+let logoutBtn = document.getElementById("btn-logout");
+
+logoutBtn && logoutBtn.addEventListener("click", function () {
+    window.location.href = "login.html";
+});
