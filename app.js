@@ -79,11 +79,19 @@ loginBtn && loginBtn.addEventListener("click", function (event) {
                         title: "Signed in successfully"
                     });
 
+                    
+                    // let userName = prompt("enter your Name")
+                    // console.log(userName);
+                    // let greetUser = document.getElementById("name")
+                    // console.log(greetUser);
+                    // greetUser.innerText = `Welcome ${userName}!`
+                   
+
                     setTimeout(function () {
                         window.location.href = "dashboard.html";
-                    }, 1000);
-
+                    }, 2000);
                     isRegistered = true;
+
                     break;
                 } else {
                     Swal.fire({
@@ -95,6 +103,19 @@ loginBtn && loginBtn.addEventListener("click", function (event) {
                     break;
                 }
             }
+            else {
+                if (loginPass.value == user.password) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Invalid Email",
+                        text: "It looks like you’ve entered the wrong email. Please try again.",
+                    });
+                    isRegistered = true;
+                    break;
+                }
+
+            }
+
         }
     }
 
@@ -116,5 +137,7 @@ loginBtn && loginBtn.addEventListener("click", function (event) {
 let logoutBtn = document.getElementById("btn-logout");
 
 logoutBtn && logoutBtn.addEventListener("click", function () {
-    window.location.href = "login.html";
+    window.location.href = "index.html";
 });
+
+
