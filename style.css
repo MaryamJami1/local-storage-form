@@ -19,7 +19,6 @@ body {
     color: #fff;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
     padding: 20px;
     position: fixed;
     height: 100%;

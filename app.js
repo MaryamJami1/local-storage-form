@@ -41,11 +41,26 @@ rgstrBtn && rgstrBtn.addEventListener("click", function () {
         title: "Sign up successfully"
     });
 
+
+   
+
+
     // Redirect to login page after 2 seconds
     setTimeout(function () {
         window.location.href = "login.html";
     }, 2000);
+
+
 });
+
+
+
+
+
+
+
+
+
 
 let loginBtn = document.getElementById("login");
 
@@ -78,14 +93,6 @@ loginBtn && loginBtn.addEventListener("click", function (event) {
                         icon: "success",
                         title: "Signed in successfully"
                     });
-
-                    
-                    // let userName = prompt("enter your Name")
-                    // console.log(userName);
-                    // let greetUser = document.getElementById("name")
-                    // console.log(greetUser);
-                    // greetUser.innerText = `Welcome ${userName}!`
-                   
 
                     setTimeout(function () {
                         window.location.href = "dashboard.html";
