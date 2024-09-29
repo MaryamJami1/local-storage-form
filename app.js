@@ -1,5 +1,3 @@
-
-
 let rgstrBtn = document.getElementById("register");
 let userArray = JSON.parse(localStorage.getItem("users")) || [];  // Load existing users from localStorage
 
@@ -7,6 +5,28 @@ rgstrBtn && rgstrBtn.addEventListener("click", function () {
     let userName = document.getElementById("accountName");
     let userEmail = document.getElementById("accountEmail");
     let userPass = document.getElementById("accountPassword");
+
+    // Email validation pattern
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    // Validation
+    if (!emailPattern.test(userEmail.value)) {
+        Swal.fire({
+            icon: "error",
+            title: "Invalid Email",
+            text: "Please enter a valid email address."
+        });
+        return; // Stop the registration process
+    }
+
+    if (userPass.value.length < 8) {
+        Swal.fire({
+            icon: "error",
+            title: "Weak Password",
+            text: "Password should be at least 8 characters long."
+        });
+        return; // Stop the registration process
+    }
 
     let userObj = {
         name: userName.value,
@@ -41,34 +61,19 @@ rgstrBtn && rgstrBtn.addEventListener("click", function () {
         title: "Sign up successfully"
     });
 
-
-   
-
-
     // Redirect to login page after 2 seconds
     setTimeout(function () {
         window.location.href = "login.html";
     }, 2000);
-
-
 });
 
-
-
-
-
-
-
-
-
-
+// Login functionality
 let loginBtn = document.getElementById("login");
 
 loginBtn && loginBtn.addEventListener("click", function (event) {
     event.preventDefault();
     let loginEmail = document.getElementById("loginEmail");
     let loginPass = document.getElementById("loginPass");
-    console.log(loginEmail.value, loginPass.value);
 
     var users = JSON.parse(localStorage.getItem("users"));
 
@@ -98,7 +103,6 @@ loginBtn && loginBtn.addEventListener("click", function (event) {
                         window.location.href = "dashboard.html";
                     }, 2000);
                     isRegistered = true;
-
                     break;
                 } else {
                     Swal.fire({
@@ -110,19 +114,6 @@ loginBtn && loginBtn.addEventListener("click", function (event) {
                     break;
                 }
             }
-            else {
-                if (loginPass.value == user.password) {
-                    Swal.fire({
-                        icon: "error",
-                        title: "Invalid Email",
-                        text: "It looks like you’ve entered the wrong email. Please try again.",
-                    });
-                    isRegistered = true;
-                    break;
-                }
-
-            }
-
         }
     }
 
@@ -141,10 +132,9 @@ loginBtn && loginBtn.addEventListener("click", function (event) {
     loginPass.value = "";
 });
 
+// Logout functionality
 let logoutBtn = document.getElementById("btn-logout");
 
 logoutBtn && logoutBtn.addEventListener("click", function () {
     window.location.href = "index.html";
 });
-
-
